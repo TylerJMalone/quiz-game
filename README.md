@@ -5,7 +5,8 @@ Quiz Game created for Challenge 04 of the Web APIs module completed through Codi
 Coding Quiz Game that takes players through a series of 5 general knowledge questions. 
 
 ## Visuals
-![Screenshot 2023-08-17 at 9 56 06 PM (2)](https://github.com/TylerJMalone/quiz-game/assets/135089114/9b38dd90-ae5d-4193-b646-72229c65f1a5)
+<img width="1512" alt="Screenshot 2023-08-17 at 10 00 32 PM" src="https://github.com/TylerJMalone/quiz-game/assets/135089114/f362a2d4-6cf8-4b7f-8466-ac03b8ad29bb">
+
 
 
 ## Usage
