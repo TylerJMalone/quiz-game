@@ -1,8 +1,33 @@
+const timerElement = document.getElementById('timer-count');
+let timeRemaining = 60;
+
+const startButton = document.getElementById('start-button');
+
+
+const appEl = document.querySelector('.app');
+const timeClock = document.querySelector('.time-clock');
+const promptEl = document.querySelector('.prompt');
+
+var allInputs = document.querySelectorAll('input');
+
+
+let timerInterval
+
+var scoreCard = document.querySelector('.score-card')
+
+// var highScores = localStorage.getItem('')
+
+startButton.addEventListener('click', () => {
+        startQuiz();
+        // startTimer();
+        startButton.style.display = "none";
+});
+
 const questions = [
     {
         question: "What is 4 + 5?",
         answers: [
-            {text: "143", correct: false},
+            {text: "45", correct: false},
             {text: "9", correct: true},
             {text: "1", correct: false},
             {text: "8", correct: false},
@@ -30,7 +55,7 @@ const questions = [
         question: "When the first law of thermodynamics, Q = ΔU + W, is applied to an ideal gas that is taken through an isothermal process...",
         answers: [
             {text: "ΔU = 0", correct: true},
-            {text: "W = 0", correct: false},
+            {text: "W = Q", correct: false},
             {text: "Q = 0", correct: false},
             {text: "ΔU = W", correct: false},
         ]
@@ -56,9 +81,38 @@ let score = 0;
 function startQuiz(){
     currentQuestionIndex = 0;
     score = 0;
+    timeRemaining = 60;
     nextButton.innerHTML = "Next";
+    appEl.classList.remove('hidden');
+    appEl.classList.add('visible');
+    timeClock.classList.remove('hidden');
+    timeClock.classList.add('visible');
+    promptEl.classList.remove('visible');
+    promptEl.classList.add('hidden');
+    allInputs.forEach(singleInput => singleInput.value = "");
     showQuestion();
+    startTimer();
 }
+
+function startTimer(){
+    timerElement.textContent = timeRemaining;
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        timerElement.textContent = timeRemaining;
+
+        if (timeRemaining === 0) {
+            clearInterval(timerInterval);
+            handleTimeUp();
+        }
+    }, 1000);
+}
+
+function handleTimeUp(){
+    resetState();
+    questionElement.innerHTML = "Out of Time!";
+    showScore();
+}
+
 function showQuestion(){
     resetState();
     let currentQuestion = questions[currentQuestionIndex];
@@ -82,7 +136,6 @@ function resetState(){
     nextButton.style.display = 'none';
     while(answerButtons.firstChild){
         answerButtons.removeChild(answerButtons.firstChild);
-
     }
 }
 
@@ -91,9 +144,11 @@ function selectAnswer(e){
     const isCorrect = selectedBtn.dataset.correct === "true";
     if(isCorrect){
         selectedBtn.classList.add('correct');
-        score++;
+        // score++;
     } else {
         selectedBtn.classList.add('incorrect');
+        // timeRemaining = timeRemaining - 5;
+        timeRemaining -= 5
     }
     Array.from(answerButtons.children).forEach(button => {
         if(button.dataset.correct === "true"){
@@ -106,16 +161,33 @@ function selectAnswer(e){
 
 function showScore(){
     resetState();
-    questionElement.innerHTML = 'You scored ' + score + ' out of ' + questions.length + '!';
+    questionElement.innerHTML = 'You scored ' + timeRemaining + " points! Nice! Save your initials below and play again to try to score even higher! (Check the local storage to see saved scores)";
     nextButton.innerHTML = "Play Again";
     nextButton.style.display = "block";
+    scoreCard.classList.remove('hidden');
+    scoreCard.classList.add('visible');
+    timeClock.classList.remove('visible');
+    timeClock.classList.add('hidden');
 }
+
+function saveScore(){
+    var initials = document.getElementById("answerbox");
+    localStorage.setItem(initials.value, timeRemaining);
+    allInputs.forEach(singleInput => singleInput.value = "");
+    scoreCard.classList.remove('visible');
+    scoreCard.classList.add('hidden');
+}
+var saveButton = document.getElementById('save-btn');
+
+saveButton.addEventListener('click', saveScore);
 
 function handleNextButton(){
     currentQuestionIndex++;
     if(currentQuestionIndex < questions.length){
+        // timeRemaining = 60;
         showQuestion();
     }else{
+        clearInterval(timerInterval);
         showScore();
     }
 }
@@ -124,8 +196,8 @@ nextButton.addEventListener("click", ()=>{
     if(currentQuestionIndex < questions.length){
         handleNextButton();
     }else{
+        scoreCard.classList.remove('visible');
+        scoreCard.classList.add('hidden');
         startQuiz();
     }
 });
-
-startQuiz();

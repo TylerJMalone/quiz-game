@@ -7,18 +7,29 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="app">
+    <header class="time-clock hidden">
+        <div id="timer">Time: <span id="timer-count">60</span></div>
+    </header>
+    <div class="prompt visible">
+        <p>Push the start button to start the quiz! But be careful because incorrect answers will decrease your time!</p>
+    </div>
+    <button id="start-button">Start</button>
+    <div class="app hidden">
         <h1>Quiz</h1>
         <div class="quiz">
-            <h2 id="question">Quuestion goes here</h2>
+            <h2 id="question">Question goes here</h2>
             <div id="answer-buttons">
                 <button class="btn">Answer 1</button>
                 <button class="btn">Answer 2</button>
                 <button class="btn">Answer 3</button>
                 <button class="btn">Answer 4</button>
             </div>
-            <button id="next-button">Next</button>
         </div>
+        <div class="score-card hidden">
+            <input type="text" name="Alias" id="answerbox">
+            <button id="save-btn">Save</button>
+        </div>
+        <button id="next-button">Next</button>
     </div>
 <script src="./script.js"></script>
 </body>
